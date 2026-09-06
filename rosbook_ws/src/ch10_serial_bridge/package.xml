@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>ch10_serial_bridge</name>
+  <version>0.1.0</version>
+  <description>Chapter 10 Arduino serial bridge with virtual sensors.</description>
+  <maintainer email="examples@example.com">ROS 2 Book</maintainer>
+  <license>Apache-2.0</license>
+  <depend>rclpy</depend>
+  <depend>std_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <exec_depend>python3-serial</exec_depend>
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>

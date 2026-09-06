@@ -1,0 +1,8 @@
+int32 target_seconds
+int32 blink_interval_ms
+---
+bool is_completed
+int32 total_blinks
+---
+int32 remaining_seconds
+float32 progress_percent

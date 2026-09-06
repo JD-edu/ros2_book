@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>ch05_parameter_examples</name>
+  <version>0.1.0</version>
+  <description>Chapter 05 dynamic parameter example without serial hardware.</description>
+  <maintainer email="examples@example.com">ROS 2 Book</maintainer>
+  <license>Apache-2.0</license>
+  <depend>rclpy</depend>
+  <depend>rcl_interfaces</depend>
+  <exec_depend>python3-serial</exec_depend>
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>

@@ -1,0 +1,4 @@
+ch05_parameter_node:
+  ros__parameters:
+    led_blink_rate: 2
+    warning_mode: false
