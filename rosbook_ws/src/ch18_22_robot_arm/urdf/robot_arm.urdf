@@ -50,7 +50,7 @@ SOFTWARE.*/
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://ch18_22_robot_arm/meshes/base_link.STL" />
+          filename="package://ch18_22_robot_arm/meshes/base.stl" />
       </geometry>
       <material
         name="">
@@ -64,7 +64,7 @@ SOFTWARE.*/
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://ch18_22_robot_arm/meshes/base_link.STL" />
+          filename="package://ch18_22_robot_arm/meshes/base.stl" />
       </geometry>
     </collision>
   </link>
@@ -90,7 +90,7 @@ SOFTWARE.*/
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://ch18_22_robot_arm/meshes/link_1.STL" />
+          filename="package://ch18_22_robot_arm/meshes/shoulder_big_part_1.stl" />
       </geometry>
       <material
         name="">
@@ -104,12 +104,12 @@ SOFTWARE.*/
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://ch18_22_robot_arm/meshes/link_1.STL" />
+          filename="package://ch18_22_robot_arm/meshes/shoulder_big_part_1.stl" />
       </geometry>
     </collision>
   </link>
   <joint
-    name="joint_1"
+    name="base_joint"
     type="revolute">
     <origin
       xyz="0 0 0.039955"
@@ -148,7 +148,7 @@ SOFTWARE.*/
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://ch18_22_robot_arm/meshes/link_2.STL" />
+          filename="package://ch18_22_robot_arm/meshes/shoulder_elbow.stl" />
       </geometry>
       <material
         name="">
@@ -162,12 +162,12 @@ SOFTWARE.*/
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://ch18_22_robot_arm/meshes/link_2.STL" />
+          filename="package://ch18_22_robot_arm/meshes/shoulder_elbow.stl" />
       </geometry>
     </collision>
   </link>
   <joint
-    name="joint_2"
+    name="shoulder_joint"
     type="revolute">
     <origin
       xyz="0 0 0.045445"
@@ -206,7 +206,7 @@ SOFTWARE.*/
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://ch18_22_robot_arm/meshes/link_3.STL" />
+          filename="package://ch18_22_robot_arm/meshes/elbow_wrist.stl" />
       </geometry>
       <material
         name="">
@@ -220,12 +220,12 @@ SOFTWARE.*/
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://ch18_22_robot_arm/meshes/link_3.STL" />
+          filename="package://ch18_22_robot_arm/meshes/elbow_wrist.stl" />
       </geometry>
     </collision>
   </link>
   <joint
-    name="joint_3"
+    name="eblow_joint"
     type="revolute">
     <origin
       xyz="0 0.07545 0"
@@ -264,7 +264,7 @@ SOFTWARE.*/
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://ch18_22_robot_arm/meshes/link_4.STL" />
+          filename="package://ch18_22_robot_arm/meshes/wrist_assembly.stl" />
       </geometry>
       <material
         name="">
@@ -278,12 +278,12 @@ SOFTWARE.*/
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://ch18_22_robot_arm/meshes/link_4.STL" />
+          filename="package://ch18_22_robot_arm/meshes/wrist_assembly.stl" />
       </geometry>
     </collision>
   </link>
   <joint
-    name="joint_4"
+    name="wrist_joint"
     type="revolute">
     <origin
       xyz="0 0.07545 0"
@@ -322,7 +322,7 @@ SOFTWARE.*/
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://ch18_22_robot_arm/meshes/link_5.STL" />
+          filename="package://ch18_22_robot_arm/meshes/Round_gear.stl" />
       </geometry>
       <material
         name="">
@@ -336,12 +336,12 @@ SOFTWARE.*/
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://ch18_22_robot_arm/meshes/link_5.STL" />
+          filename="package://ch18_22_robot_arm/meshes/Round_gear.stl" />
       </geometry>
     </collision>
   </link>
   <joint
-    name="joint_5"
+    name="gripper_joint"
     type="revolute">
     <origin
       xyz="-0.00079998 0.06655 -0.01201"
@@ -380,7 +380,7 @@ SOFTWARE.*/
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://ch18_22_robot_arm/meshes/link_6.STL" />
+          filename="package://ch18_22_robot_arm/meshes/gripper_finger.stl" />
       </geometry>
       <material
         name="">
@@ -394,7 +394,7 @@ SOFTWARE.*/
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://ch18_22_robot_arm/meshes/link_6.STL" />
+          filename="package://ch18_22_robot_arm/meshes/gripper_finger.stl" />
       </geometry>
     </collision>
   </link>
@@ -416,7 +416,7 @@ SOFTWARE.*/
       effort="1"
       velocity="0.02" />
     <mimic
-      joint="joint_5"
+      joint="gripper_joint"
       multiplier="0.0062"
       offset="0" />
   </joint>
