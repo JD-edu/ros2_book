@@ -14,4 +14,4 @@ odom_node:
   ros__parameters:
     wheel_radius: 0.033
     wheel_base: 0.160
-    ticks_per_rev: 1496
+    ticks_per_rev: 60

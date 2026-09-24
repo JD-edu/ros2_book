@@ -10,6 +10,7 @@ def generate_launch_description():
         DeclareLaunchArgument('baud_rate', default_value='115200'),
         DeclareLaunchArgument('wheel_separation', default_value='0.20'),
         DeclareLaunchArgument('max_linear_speed', default_value='0.5'),
+        DeclareLaunchArgument('max_angular_speed', default_value='1.0'),
         DeclareLaunchArgument('max_pwm', default_value='255'),
     ]
     motor_node = Node(
@@ -22,6 +23,7 @@ def generate_launch_description():
             'baud_rate': LaunchConfiguration('baud_rate'),
             'wheel_separation': LaunchConfiguration('wheel_separation'),
             'max_linear_speed': LaunchConfiguration('max_linear_speed'),
+            'max_angular_speed': LaunchConfiguration('max_angular_speed'),
             'max_pwm': LaunchConfiguration('max_pwm'),
         }],
     )

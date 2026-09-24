@@ -15,18 +15,33 @@ def velocity_to_pwm(
     wheel_separation: float,
     max_linear_speed: float,
     max_pwm: int,
+    max_angular_speed: float | None = None,
 ) -> tuple[int, int]:
-    """Apply differential-drive kinematics and scale wheel speeds to PWM."""
+    """Mix linear/angular commands and scale them to left/right PWM.
+
+    When ``max_angular_speed`` is set, a pure rotation at that angular speed
+    uses the full PWM range.  This gives an open-loop robot enough starting
+    torque to rotate instead of deriving a very small PWM from its track
+    width.  Omitting it preserves the kinematic conversion used previously.
+    """
     if not math.isfinite(linear_x) or not math.isfinite(angular_z):
         return 0, 0
     if max_linear_speed <= 0.0 or max_pwm <= 0:
         return 0, 0
 
-    half_track = wheel_separation / 2.0
-    left_speed = linear_x - angular_z * half_track
-    right_speed = linear_x + angular_z * half_track
-    left_pwm = round(left_speed / max_linear_speed * max_pwm)
-    right_pwm = round(right_speed / max_linear_speed * max_pwm)
+    linear_pwm = linear_x / max_linear_speed * max_pwm
+    if max_angular_speed is None:
+        angular_pwm = (
+            angular_z * (wheel_separation / 2.0)
+            / max_linear_speed * max_pwm
+        )
+    else:
+        if not math.isfinite(max_angular_speed) or max_angular_speed <= 0.0:
+            return 0, 0
+        angular_pwm = angular_z / max_angular_speed * max_pwm
+
+    left_pwm = round(linear_pwm - angular_pwm)
+    right_pwm = round(linear_pwm + angular_pwm)
     return (
         max(-max_pwm, min(max_pwm, left_pwm)),
         max(-max_pwm, min(max_pwm, right_pwm)),

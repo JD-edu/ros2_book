@@ -17,7 +17,7 @@ class DifferentialOdomNode(Node):
         self.declare_parameter('baudrate', 115200)
         self.declare_parameter('wheel_radius', 0.033)
         self.declare_parameter('wheel_base', 0.160)
-        self.declare_parameter('ticks_per_rev', 1496)
+        self.declare_parameter('ticks_per_rev', 25)
 
         port = self.get_parameter('port').value
         baudrate = self.get_parameter('baudrate').value

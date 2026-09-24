@@ -1,0 +1,12 @@
+pick_and_place:
+  ros__parameters:
+    publish_rate: 30.0
+    move_duration: 1.5
+    pause_duration: 0.5
+    poses.home: [0.0, 0.0, 0.0, 0.0, 0.0]
+    poses.pick_up: [0.0, 0.35, -0.62, 0.28, 0.0]
+    poses.pick: [0.0, 0.65, -0.95, 0.30, 0.0]
+    poses.grip: [0.0, 0.65, -0.95, 0.30, 3.1416]
+    poses.place_up: [1.20, 0.35, -0.62, 0.28, 3.1416]
+    poses.place: [1.20, 0.65, -0.95, 0.30, 3.1416]
+    poses.release: [1.20, 0.65, -0.95, 0.30, 0.0]

@@ -1,7 +1,9 @@
 #include <Arduino.h>
 #include <string.h>
 
-constexpr uint8_t ENC_L=2, ENC_R=3, AIN2=4, AIN1=5, STBY=6, BIN1=7, BIN2=8, PWMB=9, PWMA=11;
+// Arduino Uno + L298P shield pin mapping verified on the target hardware.
+constexpr uint8_t ENC_L=2, ENC_R=3;
+constexpr uint8_t DIR_A=12, PWM_A=10, DIR_B=13, PWM_B=11;
 constexpr uint8_t STX=0xAA, ETX=0x55, CMD_VEL=0x01, ENCODER=0x02, ACK=0x03;
 constexpr uint8_t MAX_PAYLOAD=32;
 volatile int32_t ticks_l=0, ticks_r=0;
@@ -12,12 +14,15 @@ unsigned long last_command=0, last_encoder=0;
 void pulseL(){ ticks_l += direction_l; }
 void pulseR(){ ticks_r += direction_r; }
 
-void drive(uint8_t pwm,uint8_t in1,uint8_t in2,int16_t rpm,volatile int8_t &direction){
+void drive(uint8_t dir_pin,uint8_t pwm_pin,int16_t rpm,volatile int8_t &direction){
   rpm=constrain(rpm,-120,120); direction=(rpm>0)-(rpm<0);
-  digitalWrite(in1,rpm>0); digitalWrite(in2,rpm<0);
-  analogWrite(pwm,map(abs(rpm),0,120,0,255));
+  digitalWrite(dir_pin,rpm>=0 ? HIGH : LOW);
+  analogWrite(pwm_pin,map(abs(rpm),0,120,0,255));
 }
-void stopMotors(){ drive(PWMA,AIN1,AIN2,0,direction_l); drive(PWMB,BIN1,BIN2,0,direction_r); }
+void stopMotors(){
+  analogWrite(PWM_A,0); analogWrite(PWM_B,0);
+  direction_l=0; direction_r=0;
+}
 
 void sendPacket(uint8_t type,const uint8_t *payload,uint8_t length){
   uint8_t checksum=type^length; Serial.write(STX); Serial.write(type); Serial.write(length);
@@ -30,7 +35,7 @@ void applyFrame(){
   if(rx[3+length]!=checksum || rx[4+length]!=ETX) return;
   if(rx[1]==CMD_VEL && length==5){
     int16_t left,right; memcpy(&left,rx+3,2); memcpy(&right,rx+5,2);
-    drive(PWMA,AIN1,AIN2,left,direction_l); drive(PWMB,BIN1,BIN2,right,direction_r);
+    drive(DIR_A,PWM_A,left,direction_l); drive(DIR_B,PWM_B,right,direction_r);
     last_command=millis(); sendPacket(ACK,rx+7,1);
   }
 }
@@ -46,9 +51,9 @@ void readSerial(){
 void setup(){
   Serial.begin(115200);
   pinMode(ENC_L,INPUT_PULLUP); pinMode(ENC_R,INPUT_PULLUP);
-  const uint8_t output_pins[] = {AIN1,AIN2,STBY,BIN1,BIN2,PWMA,PWMB};
+  const uint8_t output_pins[] = {DIR_A,PWM_A,DIR_B,PWM_B};
   for(uint8_t i=0;i<sizeof(output_pins);i++) pinMode(output_pins[i],OUTPUT);
-  digitalWrite(STBY,HIGH); stopMotors();
+  stopMotors();
   attachInterrupt(digitalPinToInterrupt(ENC_L),pulseL,RISING);
   attachInterrupt(digitalPinToInterrupt(ENC_R),pulseR,RISING);
   last_command=millis();

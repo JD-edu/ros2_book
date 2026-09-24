@@ -14,12 +14,14 @@ class MotorSerialNode(Node):
         super().__init__('motor_serial_node')
         self.declare_parameter('wheel_separation', 0.20)
         self.declare_parameter('max_linear_speed', 0.5)
+        self.declare_parameter('max_angular_speed', 1.0)
         self.declare_parameter('max_pwm', 255)
         self.declare_parameter('serial_port', '/dev/ttyACM0')
         self.declare_parameter('baud_rate', 115200)
 
         self.wheel_separation = float(self.get_parameter('wheel_separation').value)
         self.max_linear_speed = float(self.get_parameter('max_linear_speed').value)
+        self.max_angular_speed = float(self.get_parameter('max_angular_speed').value)
         self.max_pwm = int(self.get_parameter('max_pwm').value)
         port = str(self.get_parameter('serial_port').value)
         baud_rate = int(self.get_parameter('baud_rate').value)
@@ -28,6 +30,8 @@ class MotorSerialNode(Node):
             raise ValueError('wheel_separation must be greater than zero')
         if self.max_linear_speed <= 0.0:
             raise ValueError('max_linear_speed must be greater than zero')
+        if self.max_angular_speed <= 0.0:
+            raise ValueError('max_angular_speed must be greater than zero')
         if not 1 <= self.max_pwm <= 255:
             raise ValueError('max_pwm must be between 1 and 255')
 
@@ -43,6 +47,7 @@ class MotorSerialNode(Node):
             self.wheel_separation,
             self.max_linear_speed,
             self.max_pwm,
+            self.max_angular_speed,
         )
         frame = encode_motor_command(left_pwm, right_pwm)
         try:

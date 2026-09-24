@@ -1,20 +1,16 @@
-/* Chapter 15: TB6612FNG motor controller for Arduino Uno.
+/* Chapter 15: L298P motor shield controller for Arduino Uno.
  * Protocol: $M,LLLL,RRRR# followed by a newline.
- * Wiring from Section 15.2:
- *   Left:  PWMA=D11, AIN1=D5, AIN2=D4
- *   Right: PWMB=D9,  BIN1=D7, BIN2=D8
- *   Standby: STBY=D6
+ * Shield pin mapping verified on the target hardware:
+ *   Left (motor A):  DIR_A=D12, PWM_A=D10
+ *   Right (motor B): DIR_B=D13, PWM_B=D11
  */
 
 #include <Arduino.h>
 
-constexpr uint8_t PIN_PWMA = 11;
-constexpr uint8_t PIN_AIN1 = 5;
-constexpr uint8_t PIN_AIN2 = 4;
-constexpr uint8_t PIN_PWMB = 9;
-constexpr uint8_t PIN_BIN1 = 7;
-constexpr uint8_t PIN_BIN2 = 8;
-constexpr uint8_t PIN_STBY = 6;
+constexpr uint8_t PIN_DIR_A = 12;
+constexpr uint8_t PIN_PWM_A = 10;
+constexpr uint8_t PIN_DIR_B = 13;
+constexpr uint8_t PIN_PWM_B = 11;
 
 constexpr uint8_t FRAME_LENGTH = 13;
 constexpr unsigned long COMMAND_TIMEOUT_MS = 500;
@@ -42,24 +38,15 @@ bool parseHex16(const char* text, int16_t& result) {
   return true;
 }
 
-void driveMotor(uint8_t pwm_pin, uint8_t in1, uint8_t in2, int16_t command) {
+void driveMotor(uint8_t dir_pin, uint8_t pwm_pin, int16_t command) {
   command = constrain(command, -255, 255);
-  if (command > 0) {
-    digitalWrite(in1, HIGH);
-    digitalWrite(in2, LOW);
-  } else if (command < 0) {
-    digitalWrite(in1, LOW);
-    digitalWrite(in2, HIGH);
-  } else {
-    digitalWrite(in1, LOW);
-    digitalWrite(in2, LOW);
-  }
+  digitalWrite(dir_pin, command >= 0 ? HIGH : LOW);
   analogWrite(pwm_pin, abs(command));
 }
 
 void stopMotors() {
-  driveMotor(PIN_PWMA, PIN_AIN1, PIN_AIN2, 0);
-  driveMotor(PIN_PWMB, PIN_BIN1, PIN_BIN2, 0);
+  analogWrite(PIN_PWM_A, 0);
+  analogWrite(PIN_PWM_B, 0);
 }
 
 bool applyFrame(const char* data) {
@@ -72,22 +59,17 @@ bool applyFrame(const char* data) {
   if (!parseHex16(data + 3, left) || !parseHex16(data + 8, right)) {
     return false;
   }
-  driveMotor(PIN_PWMA, PIN_AIN1, PIN_AIN2, left);
-  driveMotor(PIN_PWMB, PIN_BIN1, PIN_BIN2, right);
+  driveMotor(PIN_DIR_A, PIN_PWM_A, left);
+  driveMotor(PIN_DIR_B, PIN_PWM_B, right);
   last_command_ms = millis();
   return true;
 }
 
 void setup() {
-  pinMode(PIN_PWMA, OUTPUT);
-  pinMode(PIN_AIN1, OUTPUT);
-  pinMode(PIN_AIN2, OUTPUT);
-  pinMode(PIN_PWMB, OUTPUT);
-  pinMode(PIN_BIN1, OUTPUT);
-  pinMode(PIN_BIN2, OUTPUT);
-  pinMode(PIN_STBY, OUTPUT);
-
-  digitalWrite(PIN_STBY, HIGH);
+  pinMode(PIN_DIR_A, OUTPUT);
+  pinMode(PIN_PWM_A, OUTPUT);
+  pinMode(PIN_DIR_B, OUTPUT);
+  pinMode(PIN_PWM_B, OUTPUT);
   stopMotors();
   Serial.begin(115200);
   last_command_ms = millis();

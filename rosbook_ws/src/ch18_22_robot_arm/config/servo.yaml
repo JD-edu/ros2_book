@@ -1,0 +1,8 @@
+arm_bridge:
+  ros__parameters:
+    port: "/dev/ttyACM0"
+    baudrate: 115200
+    offsets: [90.0, 90.0, 90.0, 90.0, 10.0]
+    directions: [1, -1, 1, -1, 1]
+    min_angles: [10.0, 15.0, 10.0, 20.0, 10.0]
+    max_angles: [170.0, 165.0, 170.0, 160.0, 80.0]
